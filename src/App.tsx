@@ -1,10 +1,10 @@
-import Dashboard from "./admin/pages/Dashboard";
+import { Outlet } from "react-router-dom";
 
 const App = () => {
   return (
-    <div>
-      <Dashboard />
-    </div>
+    <main>
+      <Outlet />
+    </main>
   );
 };
 

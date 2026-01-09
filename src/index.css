@@ -1,1 +1,36 @@
 @import "tailwindcss";
+
+@theme {
+  --color-deep-dark: #1e1e2f;
+  --color-panel-background: #2a2a3d;
+  --color-nav: #161622;
+  --color-light-gray: #e4e6eb;
+  --color-muted-gray: #a0a3bd;
+  --color-border-line: #3a3a4e;
+  --color-blue-tone: #6c63ff;
+  --color-lighter-purple: #8b82ff;
+  --color-bright-green: #00d084;
+  --color-red-error: #ff5e5e;
+  --color-cyan-hightlight: #00b8d9;
+  --color-warning-alerts: #ffc542;
+  --color-mold-yellow: rgb(170 143 82);
+  --color-hover-mold-yellow: rgb(200 180 100);
+}
+
+* {
+  transition: all 0.3s ease;
+}
+
+body {
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #1e1e2f;
+}
+
+@layer components {
+  button {
+    @apply cursor-pointer;
+  }
+}
