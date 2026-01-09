@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 
-const App = () => {
+const AdminLayout = () => {
   return (
     <main>
       <Outlet />
@@ -8,4 +8,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default AdminLayout;

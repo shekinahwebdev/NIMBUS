@@ -3,7 +3,11 @@ import { GrDocument } from "react-icons/gr";
 
 const QuickAction = () => {
   return (
-    <section className="bg-panel-background rounded-xl flex mt-6 flex-col gap-5 px-5 py-5 lg:py-6 border-3 border-border-line shadow-md shadow-[rgba(0,0,0,0.5)] hover:shadow-lg hover:cursor-pointer w-full">
+    <section
+      className="bg-panel-background rounded-xl flex mt-6 flex-col gap-5 px-5 py-5 lg:py-6 border-3 border-border-line shadow-[0_12px_30px_rgba(0,0,0,0.5)]
+        hover:shadow-[0_16px_40px_rgba(0,0,0,0.6)]
+        transition-shadow duration-300 hover:cursor-pointer w-full"
+    >
       <h1 className="font-bold md:text-[15px] lg:text-[19px]">Quick Actions</h1>
       <div className="flex flex-row justify-between gap-5 items-center px-5 py-4 rounded-xl hover:bg-deep-dark border border-muted-gray">
         <div className="flex justify-center items-center gap-4">
