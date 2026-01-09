@@ -1,7 +1,12 @@
 import { BiX } from "react-icons/bi";
 import { HiOutlineMenu } from "react-icons/hi";
 
-const HeaderNav = ({ open, setOpen }) => {
+interface HeaderNavProps {
+  open: boolean;
+  setOpen: (value: boolean) => void;
+}
+
+const HeaderNav = ({ open, setOpen }: HeaderNavProps) => {
   return (
     <div>
       <button
