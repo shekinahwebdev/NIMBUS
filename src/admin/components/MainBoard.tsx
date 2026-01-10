@@ -5,10 +5,7 @@ import QuickAction from "../components/QuickAction";
 import { BsEye } from "react-icons/bs";
 import { BiImage } from "react-icons/bi";
 
-interface MainBoardProps {
-  onNavigate: (view: string) => void;
-}
-const MainBoard = ({ onNavigate }: MainBoardProps) => {
+const MainBoard = () => {
   const usageOverview = [
     { title: "Total Pages", number: 5, icon: <GrDocumentText size={25} /> },
     {

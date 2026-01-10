@@ -40,7 +40,7 @@ const HomePageEditor = () => {
           />
         </div>
       </div>
-      <div className="lg:hidden mt-8 flex items-center justify-end gap-4 pt-6">
+      <div className="mt-8 flex items-center justify-end gap-4 pt-6">
         {/* <Link to="/admin">
           <button
             type="button"

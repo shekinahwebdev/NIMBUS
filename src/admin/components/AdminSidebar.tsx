@@ -3,9 +3,14 @@ import { GrDocumentText } from "react-icons/gr";
 import { HiHome } from "react-icons/hi";
 import { LuLogOut } from "react-icons/lu";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 
-const AdminSidebar = () => {
+interface AdminSidebarProps {
+  onLogOut: () => void;
+}
+const AdminSidebar = ({ onLogOut }: AdminSidebarProps) => {
+  const location = useLocation();
+  const isDashboardActive = location.pathname === "/admin";
   const status = [
     { id: "home", label: "Home", icon: <HiHome size={20} /> },
     { id: "about", label: "About", icon: <GrDocumentText size={20} /> },
@@ -35,30 +40,38 @@ const AdminSidebar = () => {
         <div className="flex flex-col px-5 py-5">
           <Link
             to="/admin"
-            className="flex flex-row items-center gap-4 text-blue-tone p-5 rounded-xl bg-deep-dark"
+            className={`flex items-center gap-4 p-5 rounded-xl
+    ${isDashboardActive ? "bg-deep-dark text-blue-tone" : "text-white"}
+  `}
           >
-            <MdOutlineSpaceDashboard size={25} className="" />
+            <MdOutlineSpaceDashboard size={25} />
             <p className="text-xl">Dashboard</p>
           </Link>
 
           <div className="flex flex-col py-5 mt-9">
             <h1 className="uppercase">Pages</h1>
-            <div>
-              {status.map((stat) => (
-                <Link
-                  to={stat.id}
-                  key={stat.id}
-                  className="flex flex-row mt-5 hover:bg-deep-dark/30 items-center gap-4 rounded-xl"
-                >
-                  <button
-                    // onClick={() => onNavigate(stat.id)}
-                    className="flex flex-row items-center gap-2 py-4 px-5 w-full rounded-xl hover:bg-deep-dark/30"
+            <div className="">
+              {status.map((stat) => {
+                const isActive = location.pathname === `/admin/${stat.id}`;
+
+                // location.pathname.startsWith(stat.id + "/");
+                return (
+                  <Link
+                    to={stat.id}
+                    key={stat.id}
+                    className="flex flex-row mt-5 items-center gap-4 rounded-xl"
                   >
-                    {stat.icon}
-                    <p className="text-[16px]">{stat.label}</p>
-                  </button>
-                </Link>
-              ))}
+                    <button
+                      className={`flex flex-row items-center gap-2 py-4 px-5 w-full rounded-xl hover:bg-deep-dark/30 ${
+                        isActive ? "bg-deep-dark text-blue-tone" : "text-white"
+                      }`}
+                    >
+                      {stat.icon}
+                      <p className="text-[16px]">{stat.label}</p>
+                    </button>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -68,7 +81,10 @@ const AdminSidebar = () => {
         to=""
         className="flex flex-row mt-5 items-center gap-4 px-5  text-red-error"
       >
-        <button className="flex flex-row items-center gap-2 py-4 px-5 w-full rounded-xl hover:bg-red-300/10">
+        <button
+          onClick={onLogOut}
+          className="flex flex-row items-center gap-2 py-4 px-5 w-full rounded-xl hover:bg-red-300/10"
+        >
           <LuLogOut />
           <p>Logout</p>
         </button>

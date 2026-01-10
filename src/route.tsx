@@ -63,10 +63,6 @@ const router = createBrowserRouter([
         path: "service",
         element: <ServicePageEditor />,
       },
-      {
-        path: "login",
-        element: <Login />,
-      },
     ],
   },
 ]);
