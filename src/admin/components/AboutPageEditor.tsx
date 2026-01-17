@@ -42,7 +42,7 @@ const AboutPageEditor = () => {
           </div>
         </div>
       </div>
-      <div className="lg:hidden mt-8 flex items-center justify-end gap-4 pt-6">
+      <div className="mt-8 flex items-center justify-end gap-4 pt-6">
         <button
           type="button"
           className="px-6 py-3 text-white rounded-lg bg-bright-green hover:bg-bright-green/60 transition-colors"

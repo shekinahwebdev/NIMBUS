@@ -1,12 +1,25 @@
 import { useState } from "react";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 import { GiPadlock } from "react-icons/gi";
+interface LoginProps {
+  onLogin: () => void;
+}
 
-const Login = () => {
+const Login = ({ onLogin }: LoginProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  //   const [error, setError] = useState("");
+  const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Simple validation for demo
+    if (email === "admin@nimbus.com" && password === "admin123") {
+      onLogin();
+    } else {
+      setError("Invalid credentials. Try admin@nimbus.com / admin123");
+    }
+  };
 
   return (
     <section className="min-h-screen flex items-center justify-center bg-gray-50 text-white px-2">
@@ -20,9 +33,9 @@ const Login = () => {
         <p className="text-center text-sm md:text-[16px] text-muted-gray">
           Sign in to manage your website
         </p>
-        {/* {error && <p className="text-red-500 text-center text-sm">{error}</p>} */}
+        {error && <p className="text-red-500 text-center text-sm">{error}</p>}
 
-        <form className="space-y-5 w-full">
+        <form className="space-y-5 w-full" onSubmit={handleSubmit}>
           <div>
             <label
               htmlFor="email"
