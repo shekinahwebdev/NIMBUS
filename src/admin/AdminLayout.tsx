@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import AdminSidebar from "./components/AdminSidebar";
 import HeaderNav from "./components/layout/HeaderNav";
 import { useState } from "react";
@@ -14,10 +14,6 @@ const AdminLayout = () => {
   const handleLogOut = () => {
     setIsLoggin(false);
   };
-
-  //   if (!isLoggedIn) {
-  //     return <Login onLogin={handleLogIn} />;
-  //   }
 
   return (
     <>

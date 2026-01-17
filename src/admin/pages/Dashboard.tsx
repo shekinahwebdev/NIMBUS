@@ -5,10 +5,6 @@ import PageEditor from "./PageEditor";
 const Dashboard = () => {
   const [currentRoute, setCurrentRoute] = useState("/admin");
 
-  // function for login
-  // function to logout
-  // function for navigate
-
   return (
     <section className="md:px-0 flex flex-row text-white relative">
       {currentRoute == "/admin" ? (
