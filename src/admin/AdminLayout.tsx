@@ -1,54 +1,72 @@
 import { Outlet } from "react-router-dom";
 import AdminSidebar from "./components/AdminSidebar";
 import HeaderNav from "./components/layout/HeaderNav";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Login from "./pages/Login";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "./../firebase/firebase";
+import { Toaster } from "react-hot-toast";
+
 const AdminLayout = () => {
   const [open, setOpen] = useState(false);
-  const [isLoggedIn, setIsLoggin] = useState(false);
+  const [user, setUser] = useState<any>(null); // current logged in admin
 
-  const handleLogIn = () => {
-    setIsLoggin(true);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const handleLogOut = async () => {
+    await signOut(auth);
   };
 
-  const handleLogOut = () => {
-    setIsLoggin(false);
-  };
+  if (!user) return <Login onLogin={() => {}} />;
 
   return (
-    <>
-      {!isLoggedIn ? (
-        <Login onLogin={handleLogIn} />
-      ) : (
-        <section className="flex min-h-screen text-white">
-          <HeaderNav open={open} setOpen={setOpen} />
+    <section className="flex min-h-screen text-white">
+      <HeaderNav open={open} setOpen={setOpen} />
 
-          <div className="hidden lg:flex">
+      <div className="hidden lg:flex">
+        <AdminSidebar onLogOut={handleLogOut} />
+      </div>
+
+      {open && (
+        <div
+          className="lg:hidden fixed inset-0 z-40 bg-black/40"
+          onClick={() => setOpen(false)}
+        >
+          <div
+            className="w-72 h-full bg-panel-background"
+            onClick={(e) => e.stopPropagation()}
+          >
             <AdminSidebar onLogOut={handleLogOut} />
           </div>
-
-          {open && (
-            <div
-              className="lg:hidden fixed inset-0 z-40 bg-black/40"
-              onClick={() => setOpen(false)}
-            >
-              <div
-                className="w-72 h-full bg-panel-background"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <AdminSidebar onLogOut={handleLogOut} />
-              </div>
-            </div>
-          )}
-
-          <div className="flex-1 flex flex-col">
-            <main className="p-6">
-              <Outlet />
-            </main>
-          </div>
-        </section>
+        </div>
       )}
-    </>
+
+      <div className="flex-1 flex flex-col">
+        <main className="p-6">
+          <Outlet />
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              duration: 4000,
+              success: {
+                duration: 3000,
+                iconTheme: { primary: "#1a243e", secondary: "#aa8f52" },
+                style: { background: "white", color: "black" },
+              },
+              error: {
+                iconTheme: { primary: "#dc2626", secondary: "#ffffff" },
+                style: { background: "#fef2f2", color: "#991b1b" },
+              },
+            }}
+          />
+        </main>
+      </div>
+    </section>
   );
 };
 
