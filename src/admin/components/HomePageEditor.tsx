@@ -17,7 +17,7 @@ const HomePageEditor = () => {
 
   useEffect(() => {
     const fetchHomePage = async () => {
-      const snap = await getDoc(doc(db, "page", "home"));
+      const snap = await getDoc(doc(db, "pages", "home"));
       if (snap.exists()) {
         const data = snap.data();
         setHeroTitle(data.heroTitle || "");

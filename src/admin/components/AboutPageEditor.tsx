@@ -1,7 +1,76 @@
 import { BiSave } from "react-icons/bi";
 import { ImageUpload } from "./ImageUpload";
+import { useEffect, useState } from "react";
+import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
+import { db } from "../../firebase/firebase";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const AboutPageEditor = () => {
+  const [aboutTitle, setAboutTitle] = useState("");
+  const [aboutImage, setAboutImage] = useState<any>();
+  const [aboutStory, setAboutStory] = useState("");
+  const [missionStatement, setMissionStatement] = useState("");
+  const [published, setPublished] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchAboutPage = async () => {
+      const snap = await getDoc(doc(db, "pages", "about"));
+      if (snap.exists()) {
+        const data = snap.data();
+        setAboutTitle(data.aboutTitle || "");
+        setAboutStory(data.aboutStory || "");
+        setAboutImage(data.setMissionStatement || "");
+        setMissionStatement(data.missionStatement || null);
+        setPublished(data.published || false);
+      }
+    };
+    fetchAboutPage();
+  }, []);
+
+  const handleSave = async () => {
+    if (!aboutImage) return alert("Upload about image");
+
+    if (loading) return;
+    setLoading(true);
+
+    try {
+      // Convert File to base64 if needed
+      const aboutImageData =
+        aboutImage instanceof File
+          ? await new Promise<string>((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onloadend = () => resolve(reader.result as string);
+              reader.onerror = reject;
+              reader.readAsDataURL(aboutImage);
+            })
+          : aboutImage;
+
+      // Save/update home page document in Firestore
+      await setDoc(doc(db, "pages", "about"), {
+        aboutTitle,
+        aboutStory,
+        aboutImage: aboutImageData,
+        missionStatement,
+        updatedAt: serverTimestamp(),
+        published,
+      });
+
+      toast.success("About page updated");
+
+      setTimeout(() => {
+        navigate("/about");
+      }, 3000);
+    } catch (error) {
+      console.error("Failed to update about page:", error);
+      toast.error("Failed to update about page");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section className="px-3 py-4 lg:py-0 lg:px-0 pb-5 lg:pb-0">
       <div className="mb-8">
@@ -16,17 +85,24 @@ const AboutPageEditor = () => {
             <label className="block text-white mb-2">Page Title</label>
             <input
               type="text"
-              defaultValue="About Our Agency"
+              value={aboutTitle}
+              onChange={(e) => setAboutTitle(e.target.value)}
+              // defaultValue="About Our Agency"
               className="w-full px-4 py-3 text-black bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
 
-          <ImageUpload label="About Image" onImageChange={() => {}} />
+          <ImageUpload
+            label="About Image"
+            onImageChange={(file, preview) => setAboutImage(file || preview)}
+          />
 
           <div>
             <label className="block text-white mb-2">Our Story</label>
             <textarea
-              defaultValue="Founded in 2008, our agency has grown to become one of the most respected names in football representation. We pride ourselves on our personal approach and commitment to each player's success."
+              value={aboutStory}
+              onChange={(e) => setAboutStory(e.target.value)}
+              // defaultValue="Founded in 2008, our agency has grown to become one of the most respected names in football representation. We pride ourselves on our personal approach and commitment to each player's success."
               rows={6}
               className="w-full px-4 py-3 bg-white border text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
             />
@@ -35,13 +111,25 @@ const AboutPageEditor = () => {
           <div>
             <label className="block text-white mb-2">Mission Statement</label>
             <textarea
-              defaultValue="To provide exceptional representation and career guidance to football players, helping them achieve their professional goals while maintaining integrity and professionalism."
+              value={missionStatement}
+              onChange={(e) => setMissionStatement(e.target.value)}
+              // defaultValue="To provide exceptional representation and career guidance to football players, helping them achieve their professional goals while maintaining integrity and professionalism."
               rows={4}
               className="w-full px-4 py-3 text-black bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
             />
           </div>
         </div>
       </div>
+
+      <div className="mb-4 flex items-center gap-2">
+        <input
+          type="checkbox"
+          checked={published}
+          onChange={(e) => setPublished(e.target.checked)}
+        />
+        <span>Publish page</span>
+      </div>
+
       <div className="mt-8 flex items-center justify-end gap-4 pt-6">
         <button
           type="button"
@@ -50,11 +138,13 @@ const AboutPageEditor = () => {
           Cancel
         </button>
         <button
-          //   onClick={handleSave}
+          onClick={handleSave}
+          disabled={loading}
+          type="submit"
           className="flex items-center gap-2 px-6 py-3 bg-blue-tone text-white rounded-lg hover:bg-blue-tone/50 transition-colors shadow-sm"
         >
           <BiSave className="w-5 h-5" />
-          Save & Publish
+          {loading ? "Saving" : " Save & Publish"}
         </button>
       </div>
     </section>
