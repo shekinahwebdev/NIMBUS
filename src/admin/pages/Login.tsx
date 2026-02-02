@@ -1,23 +1,48 @@
 import { useState } from "react";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 import { GiPadlock } from "react-icons/gi";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { auth } from "../../firebase/firebase";
+import { toast } from "react-hot-toast";
+
 interface LoginProps {
   onLogin: () => void;
 }
 
+const ADMIN_EMAIL = "admin@nimbus.com";
+
 const Login = ({ onLogin }: LoginProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simple validation for demo
-    if (email === "admin@nimbus.com" && password === "admin123") {
-      onLogin();
-    } else {
-      setError("Invalid credentials. Try admin@nimbus.com / admin123");
+    setLoading(true);
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+
+      // Only allow your admin email
+      if (user.email !== ADMIN_EMAIL) {
+        toast.error("This account is not allowed to access the admin panel.");
+        await signOut(auth);
+        return;
+      }
+
+      toast.success("Logged in successfully!");
+      onLogin(); // tell AdminLayout the admin is logged in
+    } catch (err: any) {
+      console.error(err);
+      toast.error("Invalid credentials!");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -33,7 +58,6 @@ const Login = ({ onLogin }: LoginProps) => {
         <p className="text-center text-sm md:text-[16px] text-muted-gray">
           Sign in to manage your website
         </p>
-        {error && <p className="text-red-500 text-center text-sm">{error}</p>}
 
         <form className="space-y-5 w-full" onSubmit={handleSubmit}>
           <div>
@@ -60,7 +84,6 @@ const Login = ({ onLogin }: LoginProps) => {
             >
               Password
             </label>
-
             <div className="relative mt-2">
               <input
                 type={showPassword ? "text" : "password"}
@@ -70,7 +93,6 @@ const Login = ({ onLogin }: LoginProps) => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
@@ -80,11 +102,13 @@ const Login = ({ onLogin }: LoginProps) => {
               </button>
             </div>
           </div>
+
           <button
             type="submit"
+            disabled={loading}
             className="w-full bg-mold-yellow text-white py-3 rounded-lg font-semibold hover:bg-hover-mold-yellow transition-colors duration-300"
           >
-            Sign In
+            {loading ? "Signing in..." : "Sign In"}
           </button>
         </form>
       </div>

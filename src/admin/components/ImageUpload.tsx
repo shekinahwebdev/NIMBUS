@@ -1,7 +1,6 @@
 import React, { useState, useRef } from "react";
 import { BiX } from "react-icons/bi";
 import { BsEye, BsUpload } from "react-icons/bs";
-// import { Upload, X, Eye } from 'lucide-react';
 
 interface ImageUploadProps {
   label: string;
@@ -15,29 +14,30 @@ export function ImageUpload({
   onImageChange,
 }: ImageUploadProps) {
   const [preview, setPreview] = useState<string | null>(currentImage || null);
+  const [file, setFile] = useState<File | null>(null);
   const [showPreview, setShowPreview] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    const selectedFile = e.target.files?.[0];
+    if (!selectedFile) return;
 
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const result = reader.result as string;
-        setPreview(result);
-        onImageChange(file, result);
-      };
-      reader.readAsDataURL(file);
-    }
+    setFile(selectedFile);
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const result = reader.result as string;
+      setPreview(result);
+      onImageChange(selectedFile, result);
+    };
+    reader.readAsDataURL(selectedFile);
   };
 
   const handleRemove = () => {
     setPreview(null);
+    setFile(null);
     onImageChange(null, null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   return (
@@ -56,7 +56,7 @@ export function ImageUpload({
               <button
                 type="button"
                 onClick={() => setShowPreview(true)}
-                className="bg-white text-gray-900 p-2 rounded-lg hover:bg-mold-yellow hover:text-white transition-colors"
+                className="bg-white text-gray-900 p-2 rounded-lg hover:bg-yellow-500 hover:text-white transition-colors"
               >
                 <BsEye className="w-5 h-5" />
               </button>
