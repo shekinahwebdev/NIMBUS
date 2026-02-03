@@ -62,7 +62,7 @@ const HomePageEditor = () => {
         published,
       });
 
-      console.log(heroTile, heroSubtitle,mainDescription)
+      console.log(heroTitle, heroSubtitle,mainDescription)
 
       toast.success("Home page updated");
 
