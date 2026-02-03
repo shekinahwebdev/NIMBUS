@@ -38,7 +38,7 @@ const HomePageEditor = () => {
 
     try {
       // Convert File to base64 if needed
-      console.log("Hello");
+      
 
       const heroImageData =
         heroImage instanceof File
@@ -50,7 +50,7 @@ const HomePageEditor = () => {
             })
           : heroImage; // already a base64 string
 
-      console.log(heroImageData);
+    
 
       // Save/update home page document in Firestore
       await setDoc(doc(db, "pages", "home"), {
@@ -61,6 +61,8 @@ const HomePageEditor = () => {
         updatedAt: serverTimestamp(),
         published,
       });
+
+      console.log(heroTile, heroSubtitle,mainDescription)
 
       toast.success("Home page updated");
 
