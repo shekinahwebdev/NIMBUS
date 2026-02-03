@@ -32,7 +32,7 @@ const AboutPageEditor = () => {
   }, []);
 
   const handleSave = async () => {
-    if (!aboutImage) return alert("Upload about image");
+    if (!aboutImage) return toast.success("Upload about image");
 
     if (loading) return;
     setLoading(true);

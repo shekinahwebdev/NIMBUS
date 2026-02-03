@@ -31,13 +31,15 @@ const HomePageEditor = () => {
   }, []);
 
   const handleSave = async () => {
-    if (!heroImage) return alert("Upload hero image");
+    if (!heroImage) return toast.success("Upload hero image");
 
     if (loading) return;
     setLoading(true);
 
     try {
       // Convert File to base64 if needed
+      console.log("Hello");
+
       const heroImageData =
         heroImage instanceof File
           ? await new Promise<string>((resolve, reject) => {
@@ -48,6 +50,8 @@ const HomePageEditor = () => {
             })
           : heroImage; // already a base64 string
 
+      console.log(heroImageData);
+
       // Save/update home page document in Firestore
       await setDoc(doc(db, "pages", "home"), {
         heroTitle,
@@ -57,6 +61,10 @@ const HomePageEditor = () => {
         updatedAt: serverTimestamp(),
         published,
       });
+
+      console.log(heroTitle);
+
+      console.log("Hello");
 
       toast.success("Home page updated");
 
