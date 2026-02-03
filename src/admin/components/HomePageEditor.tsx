@@ -31,7 +31,7 @@ const HomePageEditor = () => {
   }, []);
 
   const handleSave = async () => {
-    if (!heroImage) return alert("Upload hero image");
+    if (!heroImage) return toast.success("Upload hero image");
 
     if (loading) return;
     setLoading(true);
