@@ -1,4 +1,25 @@
-const Contact = ({ data }: any) => {
+import { doc, getDoc } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { db } from "../../firebase/firebase";
+
+const Contact = () => {
+  const [contactData, setContactData] = useState<any>();
+
+  useEffect(() => {
+    const fetchContact = async () => {
+      const snap = await getDoc(doc(db, "pages", "contact"));
+      if (snap.exists()) setContactData(snap.data());
+    };
+    fetchContact();
+  }, []);
+
+  if (!contactData)
+    return (
+      <div className="flex h-screen items-center justify-center bg-[#1e1e2f]">
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-[rgb(170,143,82)] border-t-transparent"></div>
+      </div>
+    );
+
   return (
     <div className="min-h-screen bg-[#1e1e2f] text-white">
       <section className="mx-auto max-w-7xl px-6 py-20">
@@ -6,10 +27,10 @@ const Contact = ({ data }: any) => {
           {/* Contact Details */}
           <div>
             <h1 className="mb-6 font-serif text-5xl font-bold text-[rgb(170,143,82)] md:text-7xl">
-              {data.pageTitle}
+              {contactData.contactTitle}
             </h1>
             <p className="mb-12 text-xl text-gray-400">
-              {data.contactDescription}
+              {contactData.contactDescription}
             </p>
 
             <div className="space-y-8">
@@ -18,10 +39,10 @@ const Contact = ({ data }: any) => {
                   Email
                 </span>
                 <a
-                  href={`mailto:${data.emailAddress}`}
+                  href={`mailto:${contactData.emailAddress}`}
                   className="text-2xl hover:underline"
                 >
-                  {data.emailAddress}
+                  {contactData.emailAddress}
                 </a>
               </div>
 
@@ -29,7 +50,7 @@ const Contact = ({ data }: any) => {
                 <span className="text-xs uppercase tracking-widest text-[rgb(170,143,82)]">
                   Phone
                 </span>
-                <span className="text-2xl">{data.phoneNumber}</span>
+                <span className="text-2xl">{contactData.phoneNumber}</span>
               </div>
 
               <div className="flex flex-col">
@@ -37,7 +58,7 @@ const Contact = ({ data }: any) => {
                   Studio
                 </span>
                 <address className="not-italic text-2xl text-gray-300">
-                  {data.officeAddress}
+                  {contactData.officeAddress}
                 </address>
               </div>
             </div>

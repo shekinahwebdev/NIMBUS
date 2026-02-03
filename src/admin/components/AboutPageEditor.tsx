@@ -22,11 +22,12 @@ const AboutPageEditor = () => {
         const data = snap.data();
         setAboutTitle(data.aboutTitle || "");
         setAboutStory(data.aboutStory || "");
-        setAboutImage(data.setMissionStatement || "");
-        setMissionStatement(data.missionStatement || null);
+        setAboutImage(data.aboutImage || "");
+        setMissionStatement(data.missionStatement || "");
         setPublished(data.published || false);
       }
     };
+
     fetchAboutPage();
   }, []);
 
@@ -37,7 +38,7 @@ const AboutPageEditor = () => {
     setLoading(true);
 
     try {
-      // Convert File to base64 if needed
+      // Convert File to base64
       const aboutImageData =
         aboutImage instanceof File
           ? await new Promise<string>((resolve, reject) => {

@@ -20,6 +20,12 @@ const MainBoard = () => {
     fetchPages();
   }, []);
 
+  const sum = pages.reduce(
+    (total, { aboutImageUpload = 0, imagesUploaded = 0 }) =>
+      total + aboutImageUpload + imagesUploaded,
+    0
+  );
+
   const usageOverview = [
     {
       title: "Total Pages",
@@ -33,7 +39,7 @@ const MainBoard = () => {
     },
     {
       title: "Images Uploaded",
-      number: pages.reduce((acc, p) => acc + (p.imagesUploaded || 0), 0),
+      number: sum,
       icon: <BiImage size={25} />,
     },
     {
@@ -42,6 +48,13 @@ const MainBoard = () => {
       icon: <FiSettings size={25} />,
     },
   ];
+
+  if (!pages)
+    return (
+      <div className="flex h-screen items-center justify-center bg-[#1e1e2f]">
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-[rgb(170,143,82)] border-t-transparent"></div>
+      </div>
+    );
 
   return (
     <div className="py-10 md:px-4 md:py-5 flex w-full flex-col justify-center text-white">

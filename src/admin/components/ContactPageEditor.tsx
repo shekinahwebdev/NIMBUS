@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 
 const ContactPageEditor = () => {
   const [contactTitle, setContactTitle] = useState("");
-  const [contactDesciption, setContactDescription] = useState("");
+  const [contactDescription, setContactDescription] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
   const [officeAddress, setOfficeAddress] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -40,7 +40,7 @@ const ContactPageEditor = () => {
       // Save/update home page document in Firestore
       await setDoc(doc(db, "pages", "contact"), {
         contactTitle,
-        contactDesciption,
+        contactDescription,
         emailAddress,
         officeAddress,
         phoneNumber,
@@ -85,7 +85,7 @@ const ContactPageEditor = () => {
           <label className="block text-white mb-2">Contact Description</label>
           <textarea
             // defaultValue="Have questions or want to discuss representation? We'd love to hear from you."
-            value={contactDesciption}
+            value={contactDescription}
             onChange={(e) => setContactDescription(e.target.value)}
             rows={3}
             className="w-full px-4 py-3 text-black bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"

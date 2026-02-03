@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { BiSave, BiTrash } from "react-icons/bi";
 import { db } from "../../firebase/firebase";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const ServicePageEditor = () => {
   const [serviceTitle, setServiceTitle] = useState("");
@@ -10,6 +11,7 @@ const ServicePageEditor = () => {
   const [serviceList, setServiceList] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [published, setPublished] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchServicesPage = async () => {
@@ -54,6 +56,10 @@ const ServicePageEditor = () => {
       });
 
       toast.success("Service page updated");
+
+      setTimeout(() => {
+        navigate("/service");
+      }, 3000);
     } catch (err) {
       console.error(err);
       toast.error("Failed to update service page");

@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Header = () => {
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-[#1e1e2f]/80 backdrop-blur-md">
@@ -9,14 +11,14 @@ const Header = () => {
 
         {/* Navigation */}
         <nav className="hidden space-x-8 md:flex">
-          {["Home", "About", "Services", "Contact"].map((item) => (
-            <a
+          {["Home", "About", "Service", "Contact"].map((item) => (
+            <Link
               key={item}
-              href={`#${item.toLowerCase()}`}
+              to={item === "Home" ? "/" : `/${item.toLowerCase()}`}
               className="text-sm font-medium uppercase tracking-widest text-gray-400 transition-colors hover:text-[rgb(170,143,82)]"
             >
               {item}
-            </a>
+            </Link>
           ))}
         </nav>
 

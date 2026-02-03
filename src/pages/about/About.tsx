@@ -25,7 +25,7 @@ const About = () => {
       {/* Header Section */}
       <section className="mx-auto max-w-7xl px-6 py-20 text-center">
         <h1 className="mb-4 font-serif text-5xl font-bold text-[rgb(170,143,82)] md:text-7xl">
-          {aboutData.pageTitle}
+          {aboutData.aboutTitle}
         </h1>
         <div className="mx-auto h-1 w-24 bg-[rgb(170,143,82)]"></div>
       </section>
@@ -43,7 +43,7 @@ const About = () => {
               Our Story
             </h2>
             <p className="text-xl leading-relaxed text-gray-300">
-              {aboutData.ourStory}
+              {aboutData.aboutStory}
             </p>
           </div>
         </div>

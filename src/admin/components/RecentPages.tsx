@@ -68,7 +68,9 @@ const RecentPages = () => {
                 <GrDocument size={20} />
               </div>
               <div className="flex flex-col  gap-1 text-left">
-                <p className="font-bold text-light-gray uppercase">{page.id}</p>
+                <p className="font-bold text-light-gray">
+                  {page.id.charAt(0).toUpperCase() + page.id.slice(1)}
+                </p>
                 <p className="text-mold-yellow">
                   {page.updatedAt
                     ? formatDistanceToNow(page.updatedAt.toDate(), {
