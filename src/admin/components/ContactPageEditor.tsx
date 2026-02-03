@@ -74,7 +74,6 @@ const ContactPageEditor = () => {
           <label className="block text-white mb-2">Page Title</label>
           <input
             type="text"
-            // defaultValue="Get In Touch"
             value={contactTitle}
             onChange={(e) => setContactTitle(e.target.value)}
             className="w-full px-4 py-3 text-black bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -84,7 +83,6 @@ const ContactPageEditor = () => {
         <div>
           <label className="block text-white mb-2">Contact Description</label>
           <textarea
-            // defaultValue="Have questions or want to discuss representation? We'd love to hear from you."
             value={contactDescription}
             onChange={(e) => setContactDescription(e.target.value)}
             rows={3}
@@ -97,7 +95,6 @@ const ContactPageEditor = () => {
             <label className="block text-white mb-2">Email Address</label>
             <input
               type="email"
-              // defaultValue="contact@footballagency.com"
               value={emailAddress}
               onChange={(e) => setEmailAddress(e.target.value)}
               className="w-full px-4 py-3 text-black bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -108,7 +105,6 @@ const ContactPageEditor = () => {
             <label className="block text-white mb-2">Phone Number</label>
             <input
               type="tel"
-              // defaultValue="+1 (555) 123-4567"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
               className="w-full px-4 py-3 text-black bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -118,7 +114,6 @@ const ContactPageEditor = () => {
         <div>
           <label className="block text-white mb-2">Office Address</label>
           <textarea
-            // defaultValue="123 Sport Street, Suite 100&#10;New York, NY 10001&#10;United States"
             rows={3}
             value={officeAddress}
             onChange={(e) => setOfficeAddress(e.target.value)}

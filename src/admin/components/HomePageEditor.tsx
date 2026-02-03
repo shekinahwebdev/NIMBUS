@@ -86,7 +86,6 @@ const HomePageEditor = () => {
             value={heroTitle}
             onChange={(e) => setHeroTitle(e.target.value)}
             type="text"
-            // defaultValue="Welcome to Our Football Agency"
             className="w-full text-black px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
@@ -96,7 +95,6 @@ const HomePageEditor = () => {
           <textarea
             value={heroSubtitle}
             onChange={(e) => setHeroSubtitle(e.target.value)}
-            // defaultValue="We represent world-class football talent and help players reach their full potential."
             rows={3}
             className="w-full px-4 py-3  text-black bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
           />
@@ -111,7 +109,6 @@ const HomePageEditor = () => {
           <textarea
             value={mainDescription}
             onChange={(e) => setMainDescription(e.target.value)}
-            // defaultValue="Our agency has been connecting talented players with top clubs for over 15 years. We provide comprehensive career management, contract negotiation, and personal development support."
             rows={5}
             className="w-full px-4 py-3  text-black bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
           />

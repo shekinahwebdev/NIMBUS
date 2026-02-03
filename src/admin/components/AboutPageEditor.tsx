@@ -88,7 +88,6 @@ const AboutPageEditor = () => {
               type="text"
               value={aboutTitle}
               onChange={(e) => setAboutTitle(e.target.value)}
-              // defaultValue="About Our Agency"
               className="w-full px-4 py-3 text-black bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
@@ -103,7 +102,6 @@ const AboutPageEditor = () => {
             <textarea
               value={aboutStory}
               onChange={(e) => setAboutStory(e.target.value)}
-              // defaultValue="Founded in 2008, our agency has grown to become one of the most respected names in football representation. We pride ourselves on our personal approach and commitment to each player's success."
               rows={6}
               className="w-full px-4 py-3 bg-white border text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
             />
@@ -114,7 +112,6 @@ const AboutPageEditor = () => {
             <textarea
               value={missionStatement}
               onChange={(e) => setMissionStatement(e.target.value)}
-              // defaultValue="To provide exceptional representation and career guidance to football players, helping them achieve their professional goals while maintaining integrity and professionalism."
               rows={4}
               className="w-full px-4 py-3 text-black bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
             />

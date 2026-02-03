@@ -23,32 +23,6 @@ const RecentPages = () => {
     fetchPage();
   }, []);
 
-  // const pages = [
-  //   {
-  //     id: "Home",
-  //     time: "2 hours",
-  //     state: "Published",
-  //     icon: <GrDocument size={19} />,
-  //   },
-  //   {
-  //     id: "About",
-  //     time: "1 hour ago",
-  //     state: "Published",
-  //     icon: <GrDocument size={19} />,
-  //   },
-  //   {
-  //     id: "Service",
-  //     time: "2 days ago",
-  //     state: "Draft",
-  //     icon: <GrDocument size={19} />,
-  //   },
-  //   {
-  //     id: "Contact",
-  //     time: "3 days ago",
-  //     state: "Published",
-  //     icon: <GrDocument size={19} />,
-  //   },
-  // ];
   return (
     <section
       className="bg-panel-background rounded-xl flex flex-col gap-5 px-5 py-5 lg:py-6 border-3 border-border-line shadow-[0_12px_30px_rgba(0,0,0,0.5)]
