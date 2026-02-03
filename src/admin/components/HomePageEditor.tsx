@@ -62,10 +62,6 @@ const HomePageEditor = () => {
         published,
       });
 
-      console.log(heroTitle);
-
-      console.log("Hello");
-
       toast.success("Home page updated");
 
       setTimeout(() => {
