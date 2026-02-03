@@ -10,10 +10,12 @@ import { Toaster } from "react-hot-toast";
 const AdminLayout = () => {
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState<any>(null); // current logged in admin
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
+      setLoading(true);
     });
     return () => unsubscribe();
   }, []);
@@ -22,6 +24,13 @@ const AdminLayout = () => {
     await signOut(auth);
   };
 
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-[#1e1e2f]">
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-[rgb(170,143,82)] border-t-transparent"></div>
+      </div>
+    );
+  }
   if (!user) return <Login onLogin={() => {}} />;
 
   return (
