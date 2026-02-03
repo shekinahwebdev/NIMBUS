@@ -30,29 +30,44 @@ const HomePageEditor = () => {
     fetchHomePage();
   }, []);
 
-  const handleSave = async () => {
-    if (!heroImage) return toast.success("Upload hero image");
+  
+  const compressImage = (file: File): Promise<string> => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target?.result as string;
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          const MAX_WIDTH = 1200; // Resize to max 1200px width
+          const scaleSize = MAX_WIDTH / img.width;
+          canvas.width = MAX_WIDTH;
+          canvas.height = img.height * scaleSize;
 
+          const ctx = canvas.getContext("2d");
+          ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+          const dataUrl = canvas.toDataURL("image/jpeg", 0.7);
+          resolve(dataUrl);
+        };
+      };
+    });
+  };
+
+  const handleSave = async () => {
+    if (!heroImage) return toast.error("Upload hero image");
     if (loading) return;
     setLoading(true);
 
     try {
-      // Convert File to base64 if needed
-      
+      let heroImageData = heroImage;
 
-      const heroImageData =
-        heroImage instanceof File
-          ? await new Promise<string>((resolve, reject) => {
-              const reader = new FileReader();
-              reader.onloadend = () => resolve(reader.result as string);
-              reader.onerror = reject;
-              reader.readAsDataURL(heroImage);
-            })
-          : heroImage; // already a base64 string
+      if (heroImage instanceof File) {
+        // COMPRESS HERE to stay under the 1MB Firestore limit
+        heroImageData = await compressImage(heroImage);
+      }
 
-    
-
-      // Save/update home page document in Firestore
       await setDoc(doc(db, "pages", "home"), {
         heroTitle,
         heroSubtitle,
@@ -62,20 +77,67 @@ const HomePageEditor = () => {
         published,
       });
 
-      console.log(heroTitle, heroSubtitle,mainDescription)
-
-      toast.success("Home page updated");
-
-      setTimeout(() => {
-        navigate("/");
-      }, 3000);
-    } catch (error) {
-      console.error("Failed to update home page:", error);
-      toast.error("Failed to update home page");
+      toast.success("Home page updated!");
+      navigate("/");
+    } catch (error: any) {
+      console.error(error);
+      // This will tell you if the file is still too big
+      if (error.code === "out-of-range") {
+        toast.error("Image is still too large for the free database limit.");
+      } else {
+        toast.error("Production Write Failed: Check Firebase Rules");
+      }
     } finally {
       setLoading(false);
     }
   };
+
+  // const handleSave = async () => {
+  //   if (!heroImage) return toast.success("Upload hero image");
+
+  //   if (loading) return;
+  //   setLoading(true);
+
+  //   try {
+  //     // Convert File to base64 if needed
+      
+
+  //     const heroImageData =
+  //       heroImage instanceof File
+  //         ? await new Promise<string>((resolve, reject) => {
+  //             const reader = new FileReader();
+  //             reader.onloadend = () => resolve(reader.result as string);
+  //             reader.onerror = reject;
+  //             reader.readAsDataURL(heroImage);
+  //           })
+  //         : heroImage; // already a base64 string
+
+    
+
+  //     // Save/update home page document in Firestore
+  //     await setDoc(doc(db, "pages", "home"), {
+  //       heroTitle,
+  //       heroSubtitle,
+  //       heroImage: heroImageData,
+  //       mainDescription,
+  //       updatedAt: serverTimestamp(),
+  //       published,
+  //     });
+
+  //     console.log(heroTitle, heroSubtitle,mainDescription)
+
+  //     toast.success("Home page updated");
+
+  //     setTimeout(() => {
+  //       navigate("/");
+  //     }, 3000);
+  //   } catch (error) {
+  //     console.error("Failed to update home page:", error);
+  //     toast.error("Failed to update home page");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   return (
     <section className="px-3 lg:px-0 pb-5 lg:pb-0">
