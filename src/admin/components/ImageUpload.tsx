@@ -14,7 +14,7 @@ export function ImageUpload({
   onImageChange,
 }: ImageUploadProps) {
   const [preview, setPreview] = useState<string | null>(currentImage || null);
-  const [file, setFile] = useState<File | null>(null);
+  // const [file, setFile] = useState<File | null>(null);
   const [showPreview, setShowPreview] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -22,7 +22,7 @@ export function ImageUpload({
     const selectedFile = e.target.files?.[0];
     if (!selectedFile) return;
 
-    setFile(selectedFile);
+    // setFile(selectedFile);
 
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -35,7 +35,7 @@ export function ImageUpload({
 
   const handleRemove = () => {
     setPreview(null);
-    setFile(null);
+    // setFile(null);
     onImageChange(null, null);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
