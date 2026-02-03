@@ -12,7 +12,23 @@ const HomePageEditor = () => {
   const [mainDescription, setMainDescription] = useState("");
   const [heroImage, setHeroImage] = useState<any>();
   const [loading, setLoading] = useState(false);
+  const [published, setPublished] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchHomePage = async () => {
+      const snap = await getDoc(doc(db, "pages", "home"));
+      if (snap.exists()) {
+        const data = snap.data();
+        setHeroTitle(data.heroTitle || "");
+        setHeroSubtitle(data.heroSubtitle || "");
+        setMainDescription(data.mainDescription || "");
+        setHeroImage(data.heroImage || null);
+        setPublished(data.published || false);
+      }
+    };
+    fetchHomePage();
+  }, []);
 
   const handleSave = async () => {
     if (!heroImage) return alert("Upload hero image");
@@ -39,6 +55,7 @@ const HomePageEditor = () => {
         heroImage: heroImageData,
         mainDescription,
         updatedAt: serverTimestamp(),
+        published,
       });
 
       toast.success("Home page updated");
@@ -53,20 +70,6 @@ const HomePageEditor = () => {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    const fetchHomePage = async () => {
-      const snap = await getDoc(doc(db, "page", "home"));
-      if (snap.exists()) {
-        const data = snap.data();
-        setHeroTitle(data.heroTitle || "");
-        setHeroSubtitle(data.heroSubtitle || "");
-        setMainDescription(data.mainDescription || "");
-        setHeroImage(data.heroImage || null);
-      }
-    };
-    fetchHomePage();
-  }, []);
 
   return (
     <section className="px-3 lg:px-0 pb-5 lg:pb-0">
@@ -114,6 +117,16 @@ const HomePageEditor = () => {
           />
         </div>
       </div>
+
+      <div className="mb-4 flex items-center gap-2">
+        <input
+          type="checkbox"
+          checked={published}
+          onChange={(e) => setPublished(e.target.checked)}
+        />
+        <span>Publish page</span>
+      </div>
+
       <div className="mt-8 flex items-center justify-end gap-4 pt-6">
         <button
           type="button"

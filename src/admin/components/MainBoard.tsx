@@ -4,10 +4,34 @@ import RecentPages from "../components/RecentPages";
 import QuickAction from "../components/QuickAction";
 import { BsEye } from "react-icons/bs";
 import { BiImage } from "react-icons/bi";
+import { useEffect, useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../firebase/firebase";
 
 const MainBoard = () => {
+  const [pages, setPages] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchPages = async () => {
+      const snap = await getDocs(collection(db, "pages"));
+      const pageData = snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      setPages(pageData);
+    };
+    fetchPages();
+  }, []);
+
+  const sum = pages.reduce(
+    (total, { aboutImageUpload = 0, imagesUploaded = 0 }) =>
+      total + aboutImageUpload + imagesUploaded,
+    0
+  );
+
   const usageOverview = [
-    { title: "Total Pages", number: 5, icon: <GrDocumentText size={25} /> },
+    {
+      title: "Total Pages",
+      number: pages.length,
+      icon: <GrDocumentText size={25} />,
+    },
     {
       title: "Daily Visits",
       number: 400,
@@ -15,11 +39,22 @@ const MainBoard = () => {
     },
     {
       title: "Images Uploaded",
-      number: 10000,
+      number: sum,
       icon: <BiImage size={25} />,
     },
-    { title: "Services Active", number: 9, icon: <FiSettings size={25} /> },
+    {
+      title: "Pages Active",
+      number: pages.filter((p) => p.published).length,
+      icon: <FiSettings size={25} />,
+    },
   ];
+
+  if (!pages)
+    return (
+      <div className="flex h-screen items-center justify-center bg-[#1e1e2f]">
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-[rgb(170,143,82)] border-t-transparent"></div>
+      </div>
+    );
 
   return (
     <div className="py-10 md:px-4 md:py-5 flex w-full flex-col justify-center text-white">

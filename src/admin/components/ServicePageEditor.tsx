@@ -1,73 +1,144 @@
-import { BiSave } from "react-icons/bi";
+import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { BiSave, BiTrash } from "react-icons/bi";
+import { db } from "../../firebase/firebase";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const ServicePageEditor = () => {
+  const [serviceTitle, setServiceTitle] = useState("");
+  const [serviceIntroduction, setServiceIntroduction] = useState("");
+  const [serviceList, setServiceList] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [published, setPublished] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchServicesPage = async () => {
+      const snap = await getDoc(doc(db, "pages", "service"));
+      if (snap.exists()) {
+        const data = snap.data();
+        setServiceTitle(data.serviceTitle || "");
+        setServiceIntroduction(data.serviceIntroduction || "");
+        setServiceList(data.serviceList || []);
+        setPublished(data.published || false);
+      }
+    };
+
+    fetchServicesPage();
+  }, []);
+
+  const updateService = (index: number, value: string) => {
+    const updated = [...serviceList];
+    updated[index] = value;
+    setServiceList(updated);
+  };
+
+  const addService = () => {
+    setServiceList([...serviceList, ""]);
+  };
+
+  const removeService = (index: number) => {
+    setServiceList(serviceList.filter((_, i) => i !== index));
+  };
+
+  const handleSave = async () => {
+    if (loading) return;
+    setLoading(true);
+
+    try {
+      await setDoc(doc(db, "pages", "service"), {
+        serviceTitle,
+        serviceIntroduction,
+        serviceList: serviceList.filter(Boolean),
+        published,
+        updatedAt: serverTimestamp(),
+      });
+
+      toast.success("Service page updated");
+
+      setTimeout(() => {
+        navigate("/service");
+      }, 3000);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to update service page");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <section className="px-3 py-4 lg:py-0 lg:px-0 pb-5 lg:pb-0">
-      <div className="mb-8">
-        <h1 className="text-mold-yellow text-xl mb-2">Service Page</h1>
-        <p className="text-muted-gray">
-          Edit content and manage your service page
-        </p>
+    <section className="px-3 py-4 space-y-6">
+      <div>
+        <label className="block text-white mb-2">Page Title</label>
+        <input
+          value={serviceTitle}
+          onChange={(e) => setServiceTitle(e.target.value)}
+          className="w-full px-4 py-3 text-black rounded-lg bg-white"
+        />
       </div>
-      <div className="space-y-6">
-        <div>
-          <label className="block text-white mb-2">Page Title</label>
-          <input
-            type="text"
-            defaultValue="Our Services"
-            className="w-full px-4 text-black py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-        </div>
 
-        <div>
-          <label className="block text-white mb-2">Introduction</label>
-          <textarea
-            defaultValue="We offer comprehensive services to support football players throughout their careers."
-            rows={3}
-            className="w-full px-4 text-black py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-          />
-        </div>
+      <div>
+        <label className="block text-white mb-2">Introduction</label>
+        <textarea
+          value={serviceIntroduction}
+          onChange={(e) => setServiceIntroduction(e.target.value)}
+          rows={3}
+          className="w-full px-4 py-3 text-black rounded-lg bg-white"
+        />
+      </div>
 
-        <div className="border border-gray-200 rounded-lg p-6 bg-gray-50">
-          <h3 className="text-gray-900 mb-4">Service List</h3>
-          <div className="space-y-4">
-            {[
-              "Contract Negotiation",
-              "Career Planning",
-              "Transfer Management",
-              "Marketing & PR",
-              "Legal Support",
-              "Financial Advice",
-            ].map((service, index) => (
-              <div
-                key={index}
-                className="bg-white p-4 rounded-lg border border-gray-200"
+      <div className="bg-gray-50 p-6 rounded-lg">
+        <h3 className="mb-4 text-gray-900">Service List</h3>
+
+        <div className="space-y-3">
+          {serviceList.map((service, index) => (
+            <div
+              key={index}
+              className="flex items-center gap-2 bg-white p-3 rounded-lg border"
+            >
+              <input
+                value={service}
+                onChange={(e) => updateService(index, e.target.value)}
+                className="flex-1 px-3 py-2 text-black border rounded-lg"
+              />
+
+              <button
+                onClick={() => removeService(index)}
+                className="text-red-500 hover:text-red-700"
               >
-                <input
-                  type="text"
-                  defaultValue={service}
-                  className="w-full px-3 py-2 border text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-            ))}
-          </div>
+                <BiTrash />
+              </button>
+            </div>
+          ))}
         </div>
-      </div>
-      <div className="mt-8 flex items-center justify-end gap-4 pt-6">
+
         <button
-          type="button"
-          className="px-6 py-3 text-white rounded-lg bg-bright-green hover:bg-bright-green/60 transition-colors"
+          onClick={addService}
+          className="mt-4 text-blue-600 hover:underline"
         >
-          Cancel
-        </button>
-        <button
-          //   onClick={handleSave}
-          className="flex items-center gap-2 px-6 py-3 bg-blue-tone text-white rounded-lg hover:bg-blue-tone/50 transition-colors shadow-sm"
-        >
-          <BiSave className="w-5 h-5" />
-          Save & Publish
+          + Add service
         </button>
       </div>
+
+      <div className="flex items-center gap-2">
+        <input
+          type="checkbox"
+          checked={published}
+          onChange={(e) => setPublished(e.target.checked)}
+        />
+        <span className="text-white">Publish page</span>
+      </div>
+
+      <button
+        onClick={handleSave}
+        disabled={loading}
+        className="flex items-center gap-2 px-6 py-3 bg-blue-tone text-white rounded-lg hover:bg-blue-tone/50 transition-colors shadow-sm"
+      >
+        <BiSave />
+        {loading ? "Saving..." : "Save & Publish"}
+      </button>
     </section>
   );
 };

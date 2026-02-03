@@ -4,7 +4,6 @@ import App from "./App";
 // admin routes
 import Dashboard from "./admin/pages/Dashboard";
 import AdminLayout from "./admin/AdminLayout";
-import Login from "./admin/pages/Login";
 
 // public pages
 import Home from "./pages/home/Home";
@@ -34,7 +33,7 @@ const router = createBrowserRouter([
         element: <Contact />,
       },
       {
-        path: "services",
+        path: "service",
         element: <Services />,
       },
     ],
