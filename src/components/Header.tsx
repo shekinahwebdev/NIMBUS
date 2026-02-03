@@ -1,3 +1,4 @@
+import { BiMenu } from "react-icons/bi";
 import { Link } from "react-router-dom";
 
 const Header = () => {
@@ -24,19 +25,7 @@ const Header = () => {
 
         {/* Mobile Toggle (Visual Only) */}
         <button className="text-[rgb(170,143,82)] md:hidden">
-          <svg
-            className="h-6 w-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M4 6h16M4 12h16m7"
-            />
-          </svg>
+          <BiMenu size={30} />
         </button>
       </div>
     </header>
