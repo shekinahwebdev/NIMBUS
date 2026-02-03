@@ -1,27 +1,60 @@
 ## NIMBUS
 
-Nimbus is an admin simple panel which is currently under development built for single users where they:
+Nimbus is a simple admin panel currently under development, designed for single users.
 
-- Edit texts
-- Upload Images
-- Edit Home Page
-- Manage services
-- Update services
+With Nimbus, users can:
+• Edit text content
+• Upload images
+• Edit the Home Page
+• Manage services
+• Update services
 
-## CORE FEATURES
+## Core Features
 
 • Secure Login page
-• Dashboard home showing site overview
-• Page-based editor with a sidebar listing pages: Home, About, Services,Contact
-• Each page editor allows:
-• Editing text fields (titles, paragraphs, descriptions)
-• Uploading and replacing images (hero images, gallery, player photos)
-• Save & Publish button
+• Dashboard home displaying a site overview
+• Page-based editor with a sidebar listing pages: Home, About, Services, Contact
+• Page editor capabilities:
+• Edit text fields (titles, paragraphs, descriptions)
+• Upload and replace images (hero images, gallery images, player photos)
+• Save & Publish button to update content
 • Simple navigation sidebar
 • Logout button
 
-## TECH STACK
+## Tech Stack
 
-• Frontend: React + Tailwind + Context API
-• Backend: Firebase (Auth + Firestore + Storage)
+• Frontend: React + Tailwind CSS + Context API
+• Backend: Firebase (Authentication + Firestore + Storage)
 • Hosting: Vercel
+
+Nimbus/
+├── public/
+├── src/
+│ ├── admin/
+| ├── components/
+| ├── pages/
+| ├── services/
+| AdminLayout.tsxs
+| ├── components/
+│ ├── pages/
+│ ├── firebase/
+| ├── libs/
+│ └── App.jsx
+├── package.json
+└── README.md
+
+# Clone the repository
+
+git clone https://github.com/shekinahwebdev/NIMBUS.git
+
+# Navigate to project folder
+
+cd nimbus
+
+# Install dependencies
+
+npm install
+
+# Start development server
+
+npm start

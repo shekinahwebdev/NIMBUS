@@ -16,6 +16,7 @@ const AdminLayout = () => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       // setLoading(true);
+      console.log("Current user:", auth.currentUser?.email);
     });
     return () => unsubscribe();
   }, []);
