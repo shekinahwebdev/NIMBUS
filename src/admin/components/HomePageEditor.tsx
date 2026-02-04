@@ -91,47 +91,7 @@ const HomePageEditor = () => {
     }
   };
 
-  // const handleSave = async () => {
-  //   if (!heroImage) return toast.success("Upload hero image");
-
-  //   if (loading) return;
-  //   setLoading(true);
-
-  //   try {
-  //     // Convert File to base64 if needed
-
-  //     const heroImageData =
-  //       heroImage instanceof File
-  //         ? await new Promise<string>((resolve, reject) => {
-  //             const reader = new FileReader();
-  //             reader.onloadend = () => resolve(reader.result as string);
-  //             reader.onerror = reject;
-  //             reader.readAsDataURL(heroImage);
-  //           })
-  //         : heroImage; // already a base64 string
-
-  //     // Save/update home page document in Firestore
-  //     await setDoc(doc(db, "pages", "home"), {
-  //       heroTitle,
-  //       heroSubtitle,
-  //       heroImage: heroImageData,
-  //       mainDescription,
-  //       updatedAt: serverTimestamp(),
-  //       published,
-  //     });
-
-  //     toast.success("Home page updated");
-
-  //     setTimeout(() => {
-  //       navigate("/");
-  //     }, 3000);
-  //   } catch (error) {
-  //     console.error("Failed to update home page:", error);
-  //     toast.error("Failed to update home page");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+ 
 
   return (
     <section className="px-3 lg:px-0 pb-5 lg:pb-0">
